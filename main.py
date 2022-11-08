@@ -2,9 +2,7 @@ import os
 import sys
 import math
 
-
 import pygame
-
 
 pygame.init()
 size = width, height = 800, 800
@@ -39,8 +37,9 @@ class Figur:
             self.name = name
             self.type = type
 
-            self.image = pygame.image.load(os.path.join("textures", type+("_w" if farbe == 0 else "_s") + ".png")).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (width/8, height/8))
+            self.image = pygame.image.load(
+                os.path.join("textures", type + ("_w" if farbe == 0 else "_s") + ".png")).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (width / 8, height / 8))
 
             self.initial_pos = True
             self.farbe = farbe
@@ -60,92 +59,92 @@ class Figur:
 
             if self.farbe == 0:
                 if self.initial_pos:
-                    if 0 <= i-1 <= 7:
-                        if feld[i-1][j] is None:
+                    if 0 <= i - 1 <= 7:
+                        if feld[i - 1][j] is None:
                             self.possibilities += [(0, -1)]
-                            if 0 <= i-2 <= 7:
-                                if feld[i-2][j] is None:
+                            if 0 <= i - 2 <= 7:
+                                if feld[i - 2][j] is None:
                                     self.possibilities += [(0, -2)]
 
                 else:
-                    if 0 <= i-1 <= 7:
-                        if feld[i-1][j] is None:
+                    if 0 <= i - 1 <= 7:
+                        if feld[i - 1][j] is None:
                             self.possibilities += [(0, -1)]
 
                 if 0 <= i - 1 <= 7 and 0 <= j - 1 <= 7:
                     if feld[i - 1][j - 1] is not None:
-                        if feld[i-1][j-1].farbe != self.farbe:
+                        if feld[i - 1][j - 1].farbe != self.farbe:
                             self.possibilities += [(-1, -1)]
                 if 0 <= i - 1 <= 7 and 0 <= j + 1 <= 7:
                     if feld[i - 1][j + 1] is not None:
-                        if feld[i-1][j+1].farbe != self.farbe:
+                        if feld[i - 1][j + 1].farbe != self.farbe:
                             self.possibilities += [(1, -1)]
 
             if self.farbe == 1:
                 if self.initial_pos:
-                    if 0 <= i+1 <= 7:
-                        if feld[i+1][j] is None:
+                    if 0 <= i + 1 <= 7:
+                        if feld[i + 1][j] is None:
                             self.possibilities += [(0, 1)]
-                            if 0 <= i+2 <= 7:
-                                if feld[i+2][j] is None:
+                            if 0 <= i + 2 <= 7:
+                                if feld[i + 2][j] is None:
                                     self.possibilities += [(0, 2)]
 
                 else:
-                    if 0 <= i+1 <= 7:
-                        if feld[i+1][j] is None:
+                    if 0 <= i + 1 <= 7:
+                        if feld[i + 1][j] is None:
                             self.possibilities += [(0, 1)]
 
                 if 0 <= i + 1 <= 7 and 0 <= j + 1 <= 7:
                     if feld[i + 1][j + 1] is not None:
-                        if feld[i+1][j+1].farbe != self.farbe:
+                        if feld[i + 1][j + 1].farbe != self.farbe:
                             self.possibilities += [(1, 1)]
                 if 0 <= i + 1 <= 7 and 0 <= j - 1 <= 7:
                     if feld[i + 1][j - 1] is not None:
-                        if feld[i+1][j-1].farbe != self.farbe:
+                        if feld[i + 1][j - 1].farbe != self.farbe:
                             self.possibilities += [(-1, 1)]
 
         if self.type == "turm" or self.type == "koenigin":
             # hoch
             for k in range(1, 8):
-                if 0 <= i-k <= 7:
-                    if feld[i-k][j] is None:
+                if 0 <= i - k <= 7:
+                    if feld[i - k][j] is None:
                         self.possibilities += [(0, -k)]
                         continue
 
-                    if feld[i-k][j].farbe != self.farbe:
+                    if feld[i - k][j].farbe != self.farbe:
                         self.possibilities += [(0, -k)]
                     break
 
             # runter
             for k in range(1, 8):
-                if 0 <= i+k <= 7:
-                    if feld[i+k][j] is None:
+                if 0 <= i + k <= 7:
+                    if feld[i + k][j] is None:
                         self.possibilities += [(0, k)]
                         continue
 
-                    if feld[i+k][j].farbe != self.farbe:
+                    if feld[i + k][j].farbe != self.farbe:
                         self.possibilities += [(0, k)]
                     break
 
             # links
             for k in range(1, 8):
                 if 0 <= j - k <= 7:
-                    if feld[i][j-k] is None:
+                    if feld[i][j - k] is None:
                         self.possibilities += [(-k, 0)]
                         continue
 
-                    if feld[i][j-k].farbe != self.farbe:
+                    if feld[i][j - k].farbe != self.farbe:
                         self.possibilities += [(-k, 0)]
                     break
 
             # rechts
             for k in range(1, 8):
                 if 0 <= j + k <= 7:
-                    if feld[i][j+k] is None:
+                    if feld[i][j + k] is None:
                         self.possibilities += [(k, 0)]
                         continue
 
-                    if feld[i][j+k].farbe != self.farbe:
+                    if feld[i][j + k].farbe != self.farbe:
                         self.possibilities += [(k, 0)]
                     break
 
@@ -158,8 +157,8 @@ class Figur:
                     if a == -b:
                         continue
 
-                    if 0 <= i+a <= 7 and 0 <= j+b <= 7:
-                        if feld[i+a][j+b] is None or feld[i+a][j+b].farbe != self.farbe:
+                    if 0 <= i + a <= 7 and 0 <= j + b <= 7:
+                        if feld[i + a][j + b] is None or feld[i + a][j + b].farbe != self.farbe:
                             self.possibilities += [(b, a)]
 
         if self.type == "laeufer" or self.type == "koenigin":
@@ -167,26 +166,26 @@ class Figur:
             for a in range(1, 8):
                 for b in range(1, 8):
                     if a == b:
-                        if 0 <= i+a <= 7 and 0 <= j+b <= 7 and plus_plus:
-                            if feld[i+a][j+b] is None or feld[i+a][j+b].farbe != self.farbe:
+                        if 0 <= i + a <= 7 and 0 <= j + b <= 7 and plus_plus:
+                            if feld[i + a][j + b] is None or feld[i + a][j + b].farbe != self.farbe:
                                 self.possibilities += [(b, a)]
                             else:
                                 plus_plus = False
 
-                        if 0 <= i+a <= 7 and 0 <= j-b <= 7 and plus_minus:
-                            if feld[i+a][j-b] is None or feld[i+a][j-b].farbe != self.farbe:
+                        if 0 <= i + a <= 7 and 0 <= j - b <= 7 and plus_minus:
+                            if feld[i + a][j - b] is None or feld[i + a][j - b].farbe != self.farbe:
                                 self.possibilities += [(-b, a)]
                             else:
                                 plus_minus = False
 
-                        if 0 <= i-a <= 7 and 0 <= j+b <= 7 and minus_plus:
-                            if feld[i-a][j+b] is None or feld[i-a][j+b].farbe != self.farbe:
+                        if 0 <= i - a <= 7 and 0 <= j + b <= 7 and minus_plus:
+                            if feld[i - a][j + b] is None or feld[i - a][j + b].farbe != self.farbe:
                                 self.possibilities += [(b, -a)]
                             else:
                                 minus_plus = False
 
-                        if 0 <= i-a <= 7 and 0 <= j-b <= 7 and minus_minus:
-                            if feld[i-a][j-b] is None or feld[i-a][j-b].farbe != self.farbe:
+                        if 0 <= i - a <= 7 and 0 <= j - b <= 7 and minus_minus:
+                            if feld[i - a][j - b] is None or feld[i - a][j - b].farbe != self.farbe:
                                 self.possibilities += [(-b, -a)]
                             else:
                                 minus_minus = False
@@ -195,16 +194,27 @@ class Figur:
             for a in (1, 0, -1):
                 for b in (1, 0, -1):
                     if not (a == b == 0):
-                        if 0 <= i+a <= 7 and 0 <= j+b <= 7:
-                            if feld[i+a][j+b] is None or feld[i+a][j+b].farbe != self.farbe:
+                        if 0 <= i + a <= 7 and 0 <= j + b <= 7:
+                            if feld[i + a][j + b] is None or feld[i + a][j + b].farbe != self.farbe:
                                 self.possibilities += [(b, a)]
+
+
+class GameState:
+    STATES = ["laufend", "schach", "schachmatt", "gewonnen"]
+
+    def __init__(self, state, advantage_player=-1):
+        if state in self.STATES:
+            self.state = state
+            self.advantage_player = advantage_player
+        else:
+            raise ValueError(f"state must be one of {self.STATES} and cannot be {state}")
 
 
 class Brett:
     feld: list[list[Figur | None]]
 
     def __init__(self):
-        self.feld = [[None for _ in range(8)]for _ in range(8)]
+        self.feld = [[None for _ in range(8)] for _ in range(8)]
         # schwarz oben
         # Turm
         self.feld[0][0] = Figur("turm_1_s", "turm", FARBE_SCHWARZ)
@@ -270,14 +280,15 @@ class Brett:
         if cp is None:
             return
 
-        if self.feld[goal[0]][goal[1]] is not None and self.feld[initial[0]][initial[1]].farbe == self.feld[goal[0]][goal[1]].farbe:
+        if self.feld[goal[0]][goal[1]] is not None and self.feld[initial[0]][initial[1]].farbe == self.feld[goal[0]][
+            goal[1]].farbe:
             return
 
         cp.initial_pos = False
         self.feld[goal[0]][goal[1]] = cp
         self.feld[initial[0]][initial[1]] = None
 
-    def test_won(self) -> int:
+    def test_won(self) -> GameState:
         """returns -1 if not won else number of player that won"""
         s_k = w_k = False
 
@@ -291,14 +302,41 @@ class Brett:
                             s_k = True
 
         if s_k and w_k:
-            return -1
+            for i in range(len(self.feld)):
+                for j in range(len(self.feld[i])):
+                    if self.feld[i][j] is None:
+                        continue
+                    for k in self.feld[i][j].possibilities:
+                        try:
+                            if self.feld[i + k[0]][j + k[1]].type == "koenig":
+                                koenig = self.feld[i + k[0]][j + k[1]]
+                                possibilities = [(i + _[0], j + _[1]) for _ in koenig.possibilities]
+                                testing = [False for _ in possibilities]
+                                for l in range(len(possibilities)):
+                                    for m in range(len(self.feld)):
+                                        for n in range(len(self.feld[m])):
+                                            if self.feld[m][n] is None:
+                                                continue
+                                            for o in self.feld[m][n].possibilities:
+                                                if (m + o[0], n + o[1]) == possibilities[l]:
+                                                    testing[l] = True
+
+                                if testing == []:
+                                    continue
+                                if False not in testing:
+                                    return GameState("schachmatt", koenig.farbe ^ 1)
+                                return GameState("schach", koenig.farbe ^ 1)
+                        except:
+                            pass
+            return GameState("laufend")
+
         if s_k and not w_k:
-            return 1
-        return 0
+            return GameState("gewonnen", 1)
+        return GameState("gewonnen", 0)
 
 
 brett = Brett()
-spieler_dran=0
+spieler_dran = 0
 game_running = True
 
 _x, _y, x, y = None, None, None, None
@@ -317,11 +355,15 @@ while True:
                 selection[y + i[1]][x + i[0]] = True
 
     sel_color = 20, 150, 20
-    if brett.test_won() in (0, 1):
+
+    gs = brett.test_won()
+    if gs.state == "gewonnen" or gs.state == "schachmatt":
         pygame.display.set_caption(f"Spieler {'weiß' if spieler_dran == 1 else 'schwarz'} hat gewonnen")
         game_running = False
+    elif gs.state == "schach":
+        pygame.display.set_caption(f"Spieler {'weiß' if spieler_dran == 0 else 'schwarz'} steht im Schach")
     else:
-        pygame.display.set_caption(f"Spieler {'weiß' if spieler_dran == 0 else 'schwarz'}")
+        pygame.display.set_caption(f"Spieler {'weiß' if spieler_dran == 0 else 'schwarz'} ist dran")
     screen.fill((255, 255, 255))
     mousedown = False
     for event in pygame.event.get():
@@ -334,8 +376,8 @@ while True:
             if left:
                 if (x, y) != (None, None):
                     _x, _y = pygame.mouse.get_pos()
-                    _x = math.ceil(_x/(width/8))-1
-                    _y = math.ceil(_y/(width/8))-1
+                    _x = math.ceil(_x / (width / 8)) - 1
+                    _y = math.ceil(_y / (width / 8)) - 1
 
                     if selection[_y][_x] and not (_x, _y) == (x, y):
                         brett.move((y, x), (_y, _x))
@@ -344,8 +386,8 @@ while True:
                         _x, _y = None, None
                 if (_x, _y) == (None, None):
                     x, y = pygame.mouse.get_pos()
-                    x = math.ceil(x/(width/8))-1
-                    y = math.ceil(y/(width/8))-1
+                    x = math.ceil(x / (width / 8)) - 1
+                    y = math.ceil(y / (width / 8)) - 1
 
                     if (brett.feld[y][x] is None) or (brett.feld[y][x].farbe != spieler_dran):
                         x, y = None, None
@@ -358,11 +400,11 @@ while True:
             if right:
                 x, y = None, None
 
-
     for i in range(8):
         for j in range(8):
             outline_only = False
-            rect = pygame.rect.Rect(j*math.ceil(width/8), i*math.ceil(height/8), math.ceil(width/8), math.ceil(height/8))
+            rect = pygame.rect.Rect(j * math.ceil(width / 8), i * math.ceil(height / 8), math.ceil(width / 8),
+                                    math.ceil(height / 8))
             if i % 2 == j % 2:
                 color = (230, 255, 225)
             else:
@@ -370,7 +412,8 @@ while True:
 
             __x, __y = pygame.mouse.get_pos()
 
-            if j*math.ceil(width/8) <= __x < j*math.ceil(width/8)+math.ceil(width/8) and i*math.ceil(height/8) <= __y < i*math.ceil(height/8)+math.ceil(height/8):
+            if j * math.ceil(width / 8) <= __x < j * math.ceil(width / 8) + math.ceil(width / 8) and i * math.ceil(
+                    height / 8) <= __y < i * math.ceil(height / 8) + math.ceil(height / 8):
                 color = 100, 200, 255
 
             if selection[i][j]:
@@ -392,15 +435,16 @@ while True:
                 img = brett.feld[i][j].image
                 rct = img.get_rect()
 
-                rct.center = j*math.ceil(width/8) + math.ceil(width/16), i*math.ceil(height/8) + math.ceil(height/16)
+                rct.center = j * math.ceil(width / 8) + math.ceil(width / 16), i * math.ceil(height / 8) + math.ceil(
+                    height / 16)
 
                 screen.blit(img, rct)
 
-    #fps_counter = font.render(str(FPS_CLOCK.get_fps()), True, (255, 200, 200))
-    #fps_counter_rect = fps_counter.get_rect()
-    #fps_counter_rect.center = fps_counter_rect.width//2, fps_counter_rect.height//2
+    # fps_counter = font.render(str(FPS_CLOCK.get_fps()), True, (255, 200, 200))
+    # fps_counter_rect = fps_counter.get_rect()
+    # fps_counter_rect.center = fps_counter_rect.width//2, fps_counter_rect.height//2
 
-    #screen.blit(fps_counter, fps_counter_rect)
+    # screen.blit(fps_counter, fps_counter_rect)
 
     pygame.display.flip()
     FPS_CLOCK.tick(60)
